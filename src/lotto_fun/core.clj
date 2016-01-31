@@ -4,18 +4,30 @@
   (require '[clojure.string :as str])
 
 (defn process-csv
-  [handler]
-  (with-open [rdr (reader "NCELPowerball.csv")]
-    (doseq [line (line-seq rdr)]
-      (handler
-        (drop 1
-          (drop-last
-            (str/split line #",")))))))
+  [handle-line]
+    (with-open [rdr (reader "NCELPowerball.csv")]
+      (doseq [line (line-seq rdr)]
+        (handle-line
+          (drop 1
+            (drop-last 2
+              (str/split line #",")))))))
 
-(defn print-it
-  [line]
-  (println line))
+(defn clean-data
+  [data]
+  ; Drop the header,
+  ; and drop lines from end. Do it this way in case format changes.
+  (drop 1
+    (filter (fn [item]
+      (= (count item) 6 ))
+      data)))
+
+(defn get-winning-seqs
+  []
+  (def lines [] )
+  (process-csv (fn [line]
+    (def lines (concat lines [line]))))
+  (clean-data lines))
 
 (defn -main
   [& args]
-  (process-csv print-it))
+  (println (get-winning-seqs)))

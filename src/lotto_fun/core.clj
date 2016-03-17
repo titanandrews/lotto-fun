@@ -35,10 +35,10 @@
   (println "Downloading latest winning sequences...")
   (copy-uri-to-file "http://www.nc-educationlottery.org/powerball_download.aspx"
     "NCELPowerball.csv")
-  (def lines [] )
+  (let [lines (atom [])]
   (process-csv (fn [line]
-    (def lines (concat lines [line]))) "NCELPowerball.csv")
-  (clean-data lines))
+    (reset! lines (concat (deref lines) [line]))) "NCELPowerball.csv")
+  (clean-data (deref lines))))
 
 (defn- keep-track
   [num num-map]

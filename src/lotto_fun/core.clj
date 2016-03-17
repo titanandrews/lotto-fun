@@ -49,23 +49,21 @@
   "Returns a list of pairs of the numbers paired with how many times
   it was picked, sorted by most picks first."
   [seqs]
-  ; TODO How do I make this a local var???
-  (def num-map nil)
+  (let [num-map (atom {})]
   (doseq [ seq seqs ]
     (doseq [ num (drop-last seq) ]
-      (def num-map (keep-track num num-map))))
-  (sort-by val > num-map))
+      (reset! num-map (keep-track num (deref num-map)))))
+  (sort-by val > (deref num-map))))
 
 (defn count-powerballs-only
   "Returns a list of pairs of only the powerball numbers paired with how many times
   it was picked, sorted by most picks first."
   [seqs]
-  ; TODO How do I make this a local var???
-  (def num-map nil)
+  (let [num-map (atom {})]
   (doseq [ seq seqs ]
     (doseq [ num (drop 5 seq) ]
-      (def num-map (keep-track num num-map))))
-  (sort-by val > num-map))
+      (reset! num-map (keep-track num (deref num-map)))))
+  (sort-by val > (deref num-map))))
 
 (defn -main
   [& args]

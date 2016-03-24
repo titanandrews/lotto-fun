@@ -28,7 +28,6 @@
 (defn get-winning-seqs []
   "Returns sequences of past winning numbers from the Powerball CSV file
   downloaded from the internet."
-  (println "Downloading latest winning sequences...")
   (copy-uri-to-file "http://www.nc-educationlottery.org/powerball_download.aspx"
     "NCELPowerball.csv")
   (let [lines (atom [])]

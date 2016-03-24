@@ -2,8 +2,7 @@
   (:gen-class))
   (use 'lotto-fun.core)
 
-(defn -main
-  [& args]
+(defn -main [& args]
   (let [all-nums (get-winning-seqs)]
     (let [winning-nums (count-winning-numbers-excluding-powerball all-nums)]
       (println "Top 20 numbers")

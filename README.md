@@ -1,28 +1,11 @@
 # lotto-fun
 
-Some fun number crunching on past NC lottery winning numbers while I learn some Clojure.
-
-## Installation
-
-Download from http://example.com/FIXME.
+CLI program to display some fun interesting stats on past Powerball lottery winning numbers.
+It's just a fun little project to help me learn Clojure.
 
 ## Usage
 
-FIXME: explanation
-
-    $ java -jar lotto-fun-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
+    $ lein run
 
 
 ## License

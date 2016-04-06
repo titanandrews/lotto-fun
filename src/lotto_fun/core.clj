@@ -32,8 +32,8 @@
     "NCELPowerball.csv")
   (let [lines (atom [])]
   (process-csv (fn [line]
-    (reset! lines (concat (deref lines) [line]))) "NCELPowerball.csv")
-  (clean-data (deref lines))))
+    (reset! lines (concat @lines [line]))) "NCELPowerball.csv")
+  (clean-data @lines)))
 
 (defn- keep-track [num num-map]
   (update num-map num (fn [num]
@@ -45,8 +45,8 @@
   (let [num-map (atom {})]
   (doseq [ seq seqs ]
     (doseq [ num (drop-last seq) ]
-      (reset! num-map (keep-track num (deref num-map)))))
-  (sort-by val > (deref num-map))))
+      (reset! num-map (keep-track num @num-map))))
+  (sort-by val > @num-map)))
 
 (defn count-powerballs-only [seqs]
   "Returns a list of pairs of only the powerball numbers paired with how many times
@@ -54,5 +54,5 @@
   (let [num-map (atom {})]
   (doseq [ seq seqs ]
     (doseq [ num (drop 5 seq) ]
-      (reset! num-map (keep-track num (deref num-map)))))
-  (sort-by val > (deref num-map))))
+      (reset! num-map (keep-track num @num-map))))
+  (sort-by val > @num-map)))

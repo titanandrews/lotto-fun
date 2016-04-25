@@ -31,6 +31,17 @@
     (doseq [ num-pair (take-last 10 winning-nums) ]
       (println num-pair))))
 
+(defn top-pairs [seqs]
+  (let [pairs (count-pairs seqs)]
+  (let [winning-nums (count-winning-numbers-excluding-powerball seqs)]
+    (doseq [ num-pair (take 10 winning-nums) ]
+      (let [num (nth num-pair 0)]
+      (let [count (nth num-pair 1)]
+      (let [filtered-pairs (take 10 (filter-pairs pairs num))]
+        (println num "was picked" count "times")
+        (doseq [pair filtered-pairs]
+          (println "\tas pair" (nth pair 0) (nth pair 1) "times")))))))))
+
 (defn exit []
   (println "Bye for now!")
   (System/exit 0))
@@ -42,6 +53,7 @@
   (println "(l)east   --- displays 10 least winning numbers")
   (println "(p)ower   --- displays top 10 most winning powerballs")
   (println "lp(o)wer  --- displays 10 least winning powerballs")
+  (println "p(a)irs   --- displays most winning pairs using top 10 winning numbers as base")
   (println "(q)uit    --- exits the program"))
 
 (defn- format-input [input]
@@ -63,6 +75,8 @@
         (top-powerballs seqs))
       (if (or (= "o" input) (= "lpower" input))
         (least-powerballs seqs))
+      (if (or (= "a" input) (= "pairs" input))
+        (top-pairs seqs))
       (if (or (= "h" input) (= "help" input))
         (help))
       (print "?")

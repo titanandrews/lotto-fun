@@ -84,7 +84,13 @@
       (recur (read-line)))))
 
 (defn -main [& args]
+  (println)
+  (println "LOTTO-FUN")
+  (println)
+  (println (slurp "LICENSE"))
+  (println)
   (println "Loading winning Powerball sequences...")
+  (println)
   (process-input (get-winning-seqs)))
 
   ; TODO More interesting stats coming soon!

@@ -12,13 +12,19 @@
             (drop-last 2
               (str/split line #",")))))))
 
+(defn coll->ints [seqs]
+  "Convert collection of list of strings to collection of list of integers"
+  (letfn [(to-num [s] (if (integer? s) s (java.lang.Integer/parseInt s)))]
+    (map #(map to-num %1) seqs)))
+
 (defn- clean-data [data]
   ; Drop the header,
   ; and drop lines from end. Do it this way in case format changes.
-  (drop 1
-    (filter (fn [item]
-      (= (count item) 6 ))
-      data)))
+  ; Strip the quotes.
+  (letfn [(strip-quotes [s] (str/replace s "\"" ""))]
+    (let [stripped (map #(map strip-quotes %1) data)]
+      (coll->ints (drop 1
+        (filter #(= (count %) 6 ) stripped))))))
 
 (defn- copy-uri-to-file [uri file]
   (with-open [in (io/input-stream uri)
@@ -31,13 +37,12 @@
   (copy-uri-to-file "http://www.nc-educationlottery.org/powerball_download.aspx"
     "NCELPowerball.csv")
   (let [lines (atom [])]
-  (process-csv (fn [line]
-    (reset! lines (concat @lines [line]))) "NCELPowerball.csv")
-  (clean-data @lines)))
+    (process-csv #(reset! lines (concat @lines [%])) "NCELPowerball.csv")
+    (clean-data @lines)))
 
 (defn- keep-track [num num-map]
-  (update num-map num (fn [num]
-    (if (nil? num) 1 (inc num)))))
+  (let [key (str num)]
+    (update num-map key #(if (nil? %) 1 (inc %)))))
 
 (defn drop-powerball [s]
   (drop-last s))
@@ -46,10 +51,10 @@
   "Returns a list of pairs of the numbers paired with how many times
    it was picked, sorted by most picks first."
   (let [num-map (atom {})]
-  (doseq [ row winning-seqs ]
-    (doseq [ num (drop-powerball row) ]
-      (reset! num-map (keep-track num @num-map))))
-  (sort-by val > @num-map)))
+    (doseq [ row winning-seqs ]
+      (doseq [ num (drop-powerball row) ]
+        (reset! num-map (keep-track num @num-map))))
+    (coll->ints (sort-by val > @num-map))))
 
 (defn make-str-pairs [winning-seq]
   (letfn [(make [head v pairs]
@@ -75,13 +80,13 @@
 
 (defn filter-pairs [pairs n]
   "Filter pairs containing number n"
-  (filter #(=(nth (str/split (nth % 0) #"-") 0) n)  pairs))
+  (filter #(=(nth (str/split (nth % 0) #"-") 0) (str n))  pairs))
 
 (defn count-powerballs-only [winning-seqs]
   "Returns a list of pairs of only the powerball numbers paired with how many times
    it was picked, sorted by most picks first."
   (let [num-map (atom {})]
-  (doseq [ row winning-seqs ]
-    (doseq [ num (drop 5 row) ]
-      (reset! num-map (keep-track num @num-map))))
-  (sort-by val > @num-map)))
+    (doseq [ row winning-seqs ]
+      (doseq [ num (drop 5 row) ]
+        (reset! num-map (keep-track num @num-map))))
+    (coll->ints (sort-by val > @num-map))))

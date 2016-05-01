@@ -3,7 +3,11 @@
   (use 'lotto-fun.core)
   (require '[clojure.string :as str])
 
+(defn print-count [seqs]
+  (println "There are " (count seqs) "total winning sequences."))
+
 (defn top-winners [seqs]
+  (print-count seqs)
   (let [winning-nums (count-winning-numbers-excluding-powerball seqs)]
     (println "Top 10 numbers")
     (println "Number\tTimes picked")
@@ -11,6 +15,7 @@
       (println num-pair))))
 
 (defn least-winners [seqs]
+  (print-count seqs)
   (let [winning-nums (count-winning-numbers-excluding-powerball seqs)]
     (println "Least 10 numbers")
     (println "Number\tTimes picked")
@@ -18,6 +23,7 @@
       (println num-pair))))
 
 (defn top-powerballs [seqs]
+  (print-count seqs)
   (let [winning-nums (count-powerballs-only seqs)]
     (println "Top 10 Powerball numbers")
     (println "Number\tTimes picked")
@@ -25,6 +31,7 @@
       (println num-pair))))
 
 (defn least-powerballs [seqs]
+  (print-count seqs)
   (let [winning-nums (count-powerballs-only seqs)]
     (println "Least 10 Powerball numbers")
     (println "Number\tTimes picked")
@@ -32,6 +39,7 @@
       (println num-pair))))
 
 (defn top-pairs [seqs]
+  (print-count seqs)
   (let [pairs (count-pairs seqs)]
   (let [winning-nums (count-winning-numbers-excluding-powerball seqs)]
     (doseq [ num-pair (take 10 winning-nums) ]
